@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: api-micronaut
+  version: 0.1.0
+  description: API definition for a public health endpoint and account credit consultation.
+paths:
+  /health:
+    get:
+      summary: Public health check
+      description: Returns the current application health status.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /accounts/{id}/credit:
+    get:
+      summary: Consult account credit
+      description: Returns credit information for the specified account identifier.
+      tags:
+        - Accounts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Account identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Credit details found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponse'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+    CreditResponse:
+      type: object
+      required:
+        - accountId
+        - availableCredit
+        - currency
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        availableCredit:
+          type: number
+          format: double
+          example: 2500.75
+        currency:
+          type: string
+          example: USD
+        lastUpdated:
+          type: string
+          format: date-time
+          example: '2026-08-02T12:00:00Z'
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          example: ACCOUNT_NOT_FOUND
+        message:
+          type: string
+          example: Account with the specified id does not exist.
