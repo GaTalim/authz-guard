@@ -31,4 +31,9 @@ public class JwtVerify {
             return false;
         }
     }
+
+    private boolean isTokenExpired(DecodedJWT jwt) {
+        system.out.println("Token claim time: " + jwt.getExpiresAt());
+        system.out.println("Token claim name" + jwt.getClaim("name").asString());
+    }
 }
