@@ -25,6 +25,7 @@ public class JwtVerify {
             String token = AuthorizationHeader.replace("Bearer ", "");
             DecodedJWT jwt = new JWT().decode(token);
             verifier.verify(jwt);
+            isTokenExpired(jwt);
             return true;
         } catch (JWTVerificationException e) {
             LOG.error("Invalid token", e);
@@ -33,7 +34,7 @@ public class JwtVerify {
     }
 
     private boolean isTokenExpired(DecodedJWT jwt) {
-        system.out.println("Token claim time: " + jwt.getExpiresAt());
-        system.out.println("Token claim name" + jwt.getClaim("name").asString());
+        LOG.info("Token claim name: {}", jwt.getClaim("name").asString());
+        return false;
     }
 }
